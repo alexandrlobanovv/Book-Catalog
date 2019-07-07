@@ -5,7 +5,12 @@ $upload_dir = '../images/upload/';
 
 
 if (isset($_POST['add_book'])) {
-    if (mysqli_query($connection, "INSERT INTO `books`(`title`, `author_id`, `issued`, `publishing_id`, `category_id`) VALUES ('" . $_POST['add_title'] . "', " . $_POST['add_author'] . "," . $_POST['add_issue'] . "," . $_POST['add_publishing'] . "," . $_POST['add_category'] . ")") === TRUE) {
+    $title = strip_tags(addslashes($_POST['add_title']));
+    $author = strip_tags(addslashes($_POST['add_author']));
+    $issue = strip_tags(addslashes($_POST['add_issue']));
+    $publish = strip_tags(addslashes($_POST['add_publishing']));
+    $cat = strip_tags(addslashes($_POST['add_category']));
+    if (mysqli_query($connection, "INSERT INTO `books`(`title`, `author_id`, `issued`, `publishing_id`, `category_id`) VALUES ('" . $title . "', " . $author . "," . $issue . "," . $publish . "," . $cat . ")") === TRUE) {
         printf("Книга добавлена.\n");
         header("Location: ../book.php");
     } else {
@@ -15,7 +20,12 @@ if (isset($_POST['add_book'])) {
 }
 
 if (isset($_POST['edit_book'])) {
-    if (mysqli_query($connection, "UPDATE `books` SET `title`='" . $_POST['edit_title'] . "',`author_id`=" . $_POST['edit_author'] . ",`issued`=" . $_POST['edit_issue'] . ",`publishing_id`=" . $_POST['edit_publishing'] . ",`category_id`=" . $_POST['edit_category'] . " WHERE id = " . $_POST['edit_id'] . "") === TRUE) {
+    $title = strip_tags(addslashes($_POST['edit_title']));
+    $author = strip_tags(addslashes($_POST['edit_author']));
+    $issue = strip_tags(addslashes($_POST['edit_issue']));
+    $publish = strip_tags(addslashes($_POST['edit_publishing']));
+    $cat = strip_tags(addslashes($_POST['edit_category']));
+    if (mysqli_query($connection, "UPDATE `books` SET `title`='" .$title. "',`author_id`=" .$author. ",`issued`=" .$issue. ",`publishing_id`=" .$publish. ",`category_id`=" .$cat. " WHERE id = " . $_POST['edit_id'] . "") === TRUE) {
         printf("Книга изменена.\n");
         header("Location: ../book.php");
     } else {
@@ -25,7 +35,8 @@ if (isset($_POST['edit_book'])) {
 }
 
 if (isset($_POST['delete_book'])) {
-    if (mysqli_query($connection, "DELETE FROM `books` WHERE id = " . $_POST['del_id']) === TRUE) {
+    $id = strip_tags(addslashes($_POST['del_id']));
+    if (mysqli_query($connection, "DELETE FROM `books` WHERE id = " . $id) === TRUE) {
         printf("Книга удалена.\n");
         header("Location: ../book.php");
     } else {
@@ -35,12 +46,11 @@ if (isset($_POST['delete_book'])) {
 }
 
 if (isset($_POST['add_img'])) {
-    var_dump($_FILES);
+
     if ($_FILES['upload_file']) {
         $avatar_name = $_FILES["upload_file"]["name"];
         $avatar_tmp_name = $_FILES["upload_file"]["tmp_name"];
         $error = $_FILES["upload_file"]["error"];
-        var_dump($error);
         $random_name = rand(1000, 1000000) . "-" . $avatar_name;
         $upload_name = $upload_dir . strtolower($random_name);
         $upload_name = preg_replace('/\s+/', '-', $upload_name);

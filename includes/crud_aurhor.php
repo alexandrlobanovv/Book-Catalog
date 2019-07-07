@@ -1,7 +1,8 @@
 <?php
 require 'config.php';
 if (isset($_POST['add_author'])){
-    if (mysqli_query($connection, "INSERT INTO `author`(`full_name`) VALUES ('".$_POST['full_name']."')") === TRUE) {
+    $author = strip_tags(addslashes($_POST['full_name']));
+    if (mysqli_query($connection, "INSERT INTO `author`(`full_name`) VALUES ('".$author."')") === TRUE) {
         printf("Автор добавлен.\n");
         header("Location: ../author.php");
     }else{
@@ -11,7 +12,9 @@ if (isset($_POST['add_author'])){
 }
 
 if (isset($_POST['rename_author'])){
-    if (mysqli_query($connection, "UPDATE `author` SET `full_name`='".$_POST['edit_full_name']."' WHERE id = ".$_POST['edit_id']."") === TRUE) {
+    $author = strip_tags(addslashes($_POST['edit_full_name']));
+    $id = strip_tags(addslashes($_POST['edit_id']));
+    if (mysqli_query($connection, "UPDATE `author` SET `full_name`='".$author."' WHERE id = ".$id."") === TRUE) {
         printf("Автор изменен.\n");
         header("Location: ../author.php");
     }else{
@@ -21,7 +24,8 @@ if (isset($_POST['rename_author'])){
 }
 
 if (isset($_POST['delete_author'])){
-    if (mysqli_query($connection, "DELETE FROM `author` WHERE id = ".$_POST['del_author_id']."") === TRUE) {
+    $id = strip_tags(addslashes($_POST['del_author_id']));
+    if (mysqli_query($connection, "DELETE FROM `author` WHERE id = ".$id."") === TRUE) {
         printf("Автор удален.\n");
         header("Location: ../author.php");
     }else{
